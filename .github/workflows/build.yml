@@ -9,11 +9,15 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - name: Préparer le SDK Android
+        run: |
+          SDKMAN=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          yes | $SDKMAN --licenses > /dev/null || true
+          $SDKMAN "platforms;android-34" "build-tools;34.0.0" > /dev/null || true
       - name: Decompresser le projet
         run: unzip -o JarvisOffline.zip
       - name: Pointer vers le SDK
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > JarvisOffline/local.properties
+        run: echo "sdk.dir=$ANDROID_HOME" > JarvisOffline/local.properties
       - name: Installer Gradle
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.7-bin.zip
